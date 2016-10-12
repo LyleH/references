@@ -4,46 +4,59 @@ ssh -A toor@hq-stage-docker01.stagealot.com
 ssh -A toor@hq-stage-docker02.stagealot.com
 ssh -A toor@hq-stage-docker03.stagealot.com
 
+//DVT STAGING
+ssh -A toor@hq-stage-dvt01
+
+//PERFORMANCE STAGING
+ssh -A toor@hq-stage-docker06.stagealot.com
+
 Password - MokotAs7
 
-//cd /home/toor/workspace...
+# cd /home/toor/workspace...
 
-//cd/workspace/dev-environments/docker
+# cd/workspace/dev-environments/docker
 docker-machine rm default
 ./bin/configure.py
 
-//cd/workspace/dev-environments/docker/collections
+# cd/workspace/dev-environments/docker/collections
 source compose.env
 
-//cd/workspace/dev-environments/docker/collections
+# cd/workspace/dev-environments/docker/collections
 docker-machine env default
 eval $(docker-machine env default)
 docker ps
 docker-compose pull
 docker-compose up
 
-//check logs
+# check logs
 docker -H hq-stage-docker02:4243 logs [container]
 
-//useful commands
+# useful commands
 sudo killall -HUP mDNSResponder
 docker logs -f wmsstaging_wmsapi_1
 docker logs wmsstaging_wmsapi_1 2>&1 | grep "8294143"
 docker-compose stop admin
 docker-compose up --force-recreate -d admin
+
+#Installing docker-compose (linux, it is installed bt default on MAC and Windows)
+$ curl -L https://github.com/docker/machine/releases/download/v0.8.2/docker-machine-`uname -s`-`uname -m` >/usr/local/bin/docker-machine && \
+  chmod +x /usr/local/bin/docker-machine
+sudo apt-get install python-pip
+sudo pip install docker-compose
 ****DOCKER****
 
 ****GIT WORKFLOW****
-//make new branch
+#make new branch
 git checkout -b makebranchname
-//make your changes and commit to local branch
+# make your changes and commit to local branch
 git add
 git commit
-//push to your remote branch
+# push to your remote branch
+git push --set-upstream origin lyle_update_readme
 git push
-//view differences between your branch and master
+# view differences between your branch and master
 git diff origin/ETL-2411..origin/master
-//pull master into your branch
+# pull master into your branch
 git status
 git branch --set-upstream-to=origin/master wms-931
 git status
@@ -53,10 +66,9 @@ git rebase -i
 git status
 git push origin HEAD:wms-931 -f
 git push origin HEAD:master
-
-//delete a local git branch using:
+# delete a local git branch using:
 git branch -d branch_name
-//delete a remote branch using:
+# delete a remote branch using:
 git push origin --delete <branchName>
 ****GIT WORKFLOW****
 
@@ -85,12 +97,12 @@ sudo route add default gw 10.0.12.1
 
 ****BUST CATALOGUE CACHE****
 Curl_command (is_liquor flag, bust catalogue cache)
-toor@taljenkins01:/var/log/supervisor$ curl http://taljenkins01.stagealot.com:8000/rest/productlines/40365199 | python -m json.tool | grep is_liquor
-toor@taljenkins01:/var/log/supervisor$ curl http://taljenkins01.stagealot.com:8000/rest/cache-invalidate/varnish/productline/40365199/productline
+toor@taljenkins01:/var/log/supervisor$ curl http:# taljenkins01.stagealot.com:8000/rest/productlines/40365199 | python -m json.tool | grep is_liquor
+toor@taljenkins01:/var/log/supervisor$ curl http:# taljenkins01.stagealot.com:8000/rest/cache-invalidate/varnish/productline/40365199/productline
 
-curl http://taljenkins01.stagealot.com:8000/rest/productlines/40400533 | python -m json.tool | grep is_liquor
-curl http://taljenkins01.stagealot.com:8000/rest/cache-invalidate/varnish/productline/40400533/productline
-curl -X POST http://wmsapi02:8010/outbound/product/{productId}
+curl http:# taljenkins01.stagealot.com:8000/rest/productlines/40400533 | python -m json.tool | grep is_liquor
+curl http:# taljenkins01.stagealot.com:8000/rest/cache-invalidate/varnish/productline/40400533/productline
+curl -X POST http:# wmsapi02:8010/outbound/product/{productId}
 ****BUST CATALOGUE CACHE****
 
 ****NGINX****
@@ -103,7 +115,7 @@ sudo tail nginx/php.errors.log
 (venv) toor@wmsapi:/usr/local/tal/tal/tal/services/orders/bin$ export PYTHONPATH=/usr/local/tal/tal
 (venv) toor@wmsapi:/usr/local/tal/tal/tal/services/orders/bin$ source /usr/local/tal/tal/venv/bin/activate
 (venv) toor@wmsapi:/usr/local/tal/tal/tal/services/orders/bin$ export ROLE=DEV
-//add idorder to file
+# add idorder to file
 (venv) toor@wmsapi:/usr/local/tal/tal/tal/services/orders/bin$ vi orders.csv
 python fulfill_orders_from_csv.py orders.csv
 ****ORDER FULFILLMENT MANUALLY****
@@ -123,35 +135,33 @@ five past doctor take
 mysql -h 10.2.17.240 -u tal-ro -p take2
 
 #Admin
- curl -v --user 'Lyle.Henkeman:antiqueclient90' "https://admin.takealot.com/s3cret/admin/index.php"
+ curl -v --user 'Lyle.Henkeman:antiqueclient90' "https:// admin.takealot.com/s3cret/admin/index.php"
+
 ****PRODUCTION ACCESS****
 
 ****LEAVE PORTAL****
-https://esscloud.sagevip.co.za/AXIOMATIC/
+https:// esscloud.sagevip.co.za/AXIOMATIC/
 Lyle.Henkeman
 Takealot!
 ****LEAVE PORTAL****
 
 ****RABBIT MQ****
-sudo su -
-cd /var/log/
-ls
+URL:taljenkins01.stagealot.com:15672
+user: wms
+password: wms
+sudo -i
 sudo rabbitmq status
 rabbitmqctl stop_app
 sudo rabbitmqctl start_app
 ps waux | grep rabbit
 ps -ef | grep rabbit
-cd /root/
-./chefr
-./chef-rebuild-run.sh
-vi /etc/chef/dev-role.json
-./chef-rebuild-run.sh
 ps waux | grep rabbit
 rabbitmqctl list_queues
 watch -n1 rabbitmqctl list_queues
 watch -n0.5 rabbitmqctl list_queues
-//rabbit UI
-http://localhost:15672/
+watch -n1 rabbitmqctl list_queues -p wms
+# rabbit UI
+http:# localhost:15672/
 ****RABBIT MQ****
 
 ****TEST SICK MESSAGES INTEGRATION****
@@ -164,7 +174,7 @@ python test_public_http_endpoint.py
 source virtualenvs/bin/activate
 python test_public_http_endpoint.py
 
-http://10.0.15.222:5332/public/v-0-1-21/wms-sick/errors
+http:# 10.0.15.222:5332/public/v-0-1-21/wms-sick/errors
 ****TEST SICK MESSAGES INTEGRATION****
 
 ****TEST LOGIN****
@@ -174,27 +184,27 @@ password:  test
 
 ****VAGRANT ENVIRONMENTS****
 Front_end
-http://www.wms.env/
+http:# www.wms.env/
 Back_end
-https://admin.wms.env/s3cret/admin/index.php
+https:# admin.wms.env/s3cret/admin/index.php
 User Lyle.Heneman updated with password antiqueclient90
 
 Authorization
-https://admin.wms.env/s3cret/admin/users/index.php
+https:# admin.wms.env/s3cret/admin/users/index.php
 Dashboard
-http://tal.wms.env:8080/
+http:# tal.wms.env:8080/
 Seller_portal
-http://tal.wms.env:8822/seller_select
+http:# tal.wms.env:8822/seller_select
 
 Stagealot
 Front_end
-http://www.stagealot.env/
+http:# www.stagealot.env/
 Back_end
-https://admin.stagealot.env/s3cret/admin
+https:# admin.stagealot.env/s3cret/admin
 Authorization
-https://admin.stagealot.env/s3cret/admin/users/index.php
+https:# admin.stagealot.env/s3cret/admin/users/index.php
 Dashboard
-https://dashboard.stagealot.env
+https:# dashboard.stagealot.env
 
 ssh -A wms@10.0.14.4
 Password - MokotAs7
@@ -204,7 +214,7 @@ ssh -A toor@taljenkins01.stagealot.com
 
 virtualenv --python /usr/local/src/python-2.7.9/bin/python  venv
 
-//Increase size of guest VirtualBox guest
+# Increase size of guest VirtualBox guest
 sudo VBoxManage modifyhd /Users/lyle/VirtualBox\ VMs/WMS_Linux/WMS_Linux.vdi --resize 40000
 pip install requirements.txt -e .
 toor@consumer-app:/usr/local/tal/consumer_app$ virtualenv --python /usr/local/src/python-2.7.9/bin/python  venv
@@ -225,7 +235,7 @@ toor@s4f-services:/usr/local/tal/s4f-wms-sick-service$ . virtualenvs/bin/activat
 Python 2.7.9
 
 toor@s4f-services:/usr/local/tal/s4f-wms-sick-service$ pip install -e .
-Obtaining file:///workspace/s4f-wms-sick-service
+Obtaining file:# /workspace/s4f-wms-sick-service
 
 move cd /etc /supervisor to conf.d
 deactivate and reactivate vm
@@ -264,3 +274,7 @@ if (!\tal\model\UserRole::isUserInRole($loggedin, \tal\model\UserRole::ROLE_AUTH
 to
 if (1!=1) {
 ****ADMIN USER_ROLE HACK DEV****
+
+****SERVER SPECS****
+sudo lshw -short
+****SERVER SPECS****

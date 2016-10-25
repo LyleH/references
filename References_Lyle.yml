@@ -1,13 +1,13 @@
-****DOCKER****
-//WMS STAGING
+####DOCKER####
+#WMS STAGING
 ssh -A toor@hq-stage-docker01.stagealot.com
 ssh -A toor@hq-stage-docker02.stagealot.com
 ssh -A toor@hq-stage-docker03.stagealot.com
 
-//DVT STAGING
+#DVT STAGING
 ssh -A toor@hq-stage-dvt01
 
-//PERFORMANCE STAGING
+#PERFORMANCE STAGING
 ssh -A toor@hq-stage-docker06.stagealot.com
 
 Password - MokotAs7
@@ -37,15 +37,26 @@ docker logs -f wmsstaging_wmsapi_1
 docker logs wmsstaging_wmsapi_1 2>&1 | grep "8294143"
 docker-compose stop admin
 docker-compose up --force-recreate -d admin
+docker-machine upgrade default
+
+# Linux bringing up container up
+source compose-custom.env
+export ENV_NAME='doker06'
+export WORKSPACE=$(cd ../../../ && echo $PWD)
+export COMPOSE_FILE=docker-compose.yml:dev.yml
+which docker-machine &>/dev/null && eval $(docker-machine env default)
+
+#debugging container
+docker inspect <id|name>
 
 #Installing docker-compose (linux, it is installed bt default on MAC and Windows)
 $ curl -L https://github.com/docker/machine/releases/download/v0.8.2/docker-machine-`uname -s`-`uname -m` >/usr/local/bin/docker-machine && \
   chmod +x /usr/local/bin/docker-machine
 sudo apt-get install python-pip
 sudo pip install docker-compose
-****DOCKER****
+####DOCKER####
 
-****GIT WORKFLOW****
+####GIT WORKFLOW####
 #make new branch
 git checkout -b makebranchname
 # make your changes and commit to local branch
@@ -70,9 +81,9 @@ git push origin HEAD:master
 git branch -d branch_name
 # delete a remote branch using:
 git push origin --delete <branchName>
-****GIT WORKFLOW****
+####GIT WORKFLOW####
 
-****MySQL****
+####MySQL####
 ssh toor@hq-mysql01-nightly.stagealot.com
 mysql -h db.mysql.env -u take2_bespoke catalogue -p
 
@@ -85,17 +96,17 @@ port: 3306
 Password - MokotAs7
 mysql> delete from productlines where idproductline = 34181661;
 mysql> select * from productlines where idproductline = 34181661;
-****MySQL****
+####MySQL####
 
-****MongoDB****
+####MongoDB####
 ssh toor@hq-mongo01-nightly.stagealot.com
 ssh -A toor@hq-mongo01.stagealot.com
 ping 10.4.1.31
 netstat -nr
 sudo route add default gw 10.0.12.1
-****MongoDB****
+####MongoDB####
 
-****BUST CATALOGUE CACHE****
+####BUST CATALOGUE CACHE####
 Curl_command (is_liquor flag, bust catalogue cache)
 toor@taljenkins01:/var/log/supervisor$ curl http:# taljenkins01.stagealot.com:8000/rest/productlines/40365199 | python -m json.tool | grep is_liquor
 toor@taljenkins01:/var/log/supervisor$ curl http:# taljenkins01.stagealot.com:8000/rest/cache-invalidate/varnish/productline/40365199/productline
@@ -103,30 +114,30 @@ toor@taljenkins01:/var/log/supervisor$ curl http:# taljenkins01.stagealot.com:80
 curl http:# taljenkins01.stagealot.com:8000/rest/productlines/40400533 | python -m json.tool | grep is_liquor
 curl http:# taljenkins01.stagealot.com:8000/rest/cache-invalidate/varnish/productline/40400533/productline
 curl -X POST http:# wmsapi02:8010/outbound/product/{productId}
-****BUST CATALOGUE CACHE****
+####BUST CATALOGUE CACHE####
 
-****NGINX****
+####NGINX####
 sudo ls nginx/
 toor@www:/var/log$ sudo tail nginx/access.log
 sudo tail nginx/php.errors.log
-****NGINX****
+####NGINX####
 
-****ORDER FULFILLMENT MANUALLY****
+####ORDER FULFILLMENT MANUALLY####
 (venv) toor@wmsapi:/usr/local/tal/tal/tal/services/orders/bin$ export PYTHONPATH=/usr/local/tal/tal
 (venv) toor@wmsapi:/usr/local/tal/tal/tal/services/orders/bin$ source /usr/local/tal/tal/venv/bin/activate
 (venv) toor@wmsapi:/usr/local/tal/tal/tal/services/orders/bin$ export ROLE=DEV
 # add idorder to file
 (venv) toor@wmsapi:/usr/local/tal/tal/tal/services/orders/bin$ vi orders.csv
 python fulfill_orders_from_csv.py orders.csv
-****ORDER FULFILLMENT MANUALLY****
+####ORDER FULFILLMENT MANUALLY####
 
-****KAFKA****
+####KAFKA####
 cat /etc/supervisor/conf.d/services.wms.conf
 toor@wmsapi:/usr/local/tal/tal$ pip freeze | grep kakfa
 pip install -r requirements.txt
-****KAFKA****
+####KAFKA####
 
-****PRODUCTION ACCESS****
+####PRODUCTION ACCESS####
 #Jumpbox
 ssh -A lylehenkeman@jump-box.takealot.com
 
@@ -137,15 +148,15 @@ mysql -h 10.2.17.240 -u tal-ro -p take2
 #Admin
  curl -v --user 'Lyle.Henkeman:antiqueclient90' "https:// admin.takealot.com/s3cret/admin/index.php"
 
-****PRODUCTION ACCESS****
+####PRODUCTION ACCESS####
 
-****LEAVE PORTAL****
+####LEAVE PORTAL####
 https:// esscloud.sagevip.co.za/AXIOMATIC/
 Lyle.Henkeman
 Takealot!
-****LEAVE PORTAL****
+####LEAVE PORTAL####
 
-****RABBIT MQ****
+####RABBIT MQ####
 URL:taljenkins01.stagealot.com:15672
 user: wms
 password: wms
@@ -162,9 +173,9 @@ watch -n0.5 rabbitmqctl list_queues
 watch -n1 rabbitmqctl list_queues -p wms
 # rabbit UI
 http:# localhost:15672/
-****RABBIT MQ****
+####RABBIT MQ####
 
-****TEST SICK MESSAGES INTEGRATION****
+####TEST SICK MESSAGES INTEGRATION####
 cd /usr/local/tal/s4f-wms-sick-service/bin
 history
 ifconfig
@@ -175,14 +186,14 @@ source virtualenvs/bin/activate
 python test_public_http_endpoint.py
 
 http:# 10.0.15.222:5332/public/v-0-1-21/wms-sick/errors
-****TEST SICK MESSAGES INTEGRATION****
+####TEST SICK MESSAGES INTEGRATION####
 
-****TEST LOGIN****
+####TEST LOGIN####
 user_name: dev+1@take2.co.za
 password:  test
-****TEST LOGIN****
+####TEST LOGIN####
 
-****VAGRANT ENVIRONMENTS****
+####VAGRANT ENVIRONMENTS####
 Front_end
 http:# www.wms.env/
 Back_end
@@ -249,14 +260,14 @@ toor@s4f-services:/usr/local/tal/s4f-wms-sick-service$ . virtualenvs/bin/activat
 (virtualenvs) toor@s4f-services:/usr/local/tal/s4f-wms-sick-service$ generate_proto
 Compiling protobufs in:
 /workspace/s4f-protocol-buffers
-****VAGRANT ENVIRONMENTS****
+####VAGRANT ENVIRONMENTS####
 
-****PYTHON UNIT TESTS VAGRANT****
+####PYTHON UNIT TESTS VAGRANT####
 Run_python_unit_tests
 python -m unittest test_module.TestClass.test_method
-****PYTHON UNIT TESTS VAGRANT****
+####PYTHON UNIT TESTS VAGRANT####
 
-****ADMIN USER_ROLE HACK DEV****
+####ADMIN USER_ROLE HACK DEV####
 #To make your USER_ROLE work 
 cd /workspace/tal_backend/docroot/s3cret/admin/vieworder.php
 on line 2037 change 
@@ -273,8 +284,59 @@ on line 20 change
 if (!\tal\model\UserRole::isUserInRole($loggedin, \tal\model\UserRole::ROLE_AUTH_ADMINSTRATOR)) {
 to
 if (1!=1) {
-****ADMIN USER_ROLE HACK DEV****
+####ADMIN USER_ROLE HACK DEV####
 
-****SERVER SPECS****
+####SERVER SPECS####
+#specs
 sudo lshw -short
-****SERVER SPECS****
+#linux version
+lsb_release -a
+####SERVER SPECS****
+
+####JAVA####
+#Intall JAVA on Ubuntu
+ wget --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u5-b13/jdk-8u5-linux-x64.tar.gz
+#follow wiki
+https://www.digitalocean.com/community/tutorials/how-to-manually-install-oracle-java-on-a-debian-or-ubuntu-vps
+vim ~/.bash_profile
+export JAVA_HOME=$(/usr/libexec/java_home)
+source ~/.bash_profile
+echo $JAVA_HOME
+####JAVA####
+
+
+####JENKINS####
+#building a new docker image
+http://hq-docker01:8080/
+#nacigate and click on the service / image in question
+#click build with parameters
+# in 'repository' add the repo you want for example: s4f-seller-message-service. see the following error:
+# ERROR: Error: image takealot/s4f-seller-message-service:latest not found
+
+
+Requests to load Seller Portal from browser
+ Logs into seller portal
+Assumes Seller Identity = "READERS WAREHOUSE” (big seller- could also use a randomiser here)
+Loads seller home page
+Navigates to Manage Inventory
+Updates SOH for each SKU/TSIN and saves
+Navigates to Listings header
+Add/Update multiple listings where is Listing_Uploader_Template.xlsx  uploaded. (Could someone provide me with a data set here please)?
+Navigates to manage shipping queue
+View the created shipping order
+Actions CPT and JHB 
+Cancels and Prepares shipments respectively
+Confirm shipments (I don’t know how slow this is in Production but it’s already really slow in Dev, I still need to do more debugging on why)
+Go through the shipping workflow a flag as shipped
+Duplicate order
+Cancel order and Prepare shipments respectively (again as a loop).
+Log out of Seller Portal.
+
+
+#Upbeat
+#READERS WAREHOUSE
+#Genuine Projector Lamps
+#Qtees Africa (Pty Ltd)
+#EF Traders
+
+~/.zshrc

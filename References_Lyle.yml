@@ -5,9 +5,11 @@ ssh -A toor@hq-stage-docker02.stagealot.com
 ssh -A toor@hq-stage-docker03.stagealot.com
 
 #DVT STAGING
-ssh -A toor@hq-stage-dvt01
-dvt@takealot.com
-dvttest
+ssh -A toor@hq-stage-docker06.stagealot.com
+
+#LYLE STAGING
+ssh -A toor@hq-stage-docker07.stagealot.com
+
 
 https://dashboard.wms-docker6.env
 
@@ -37,7 +39,7 @@ docker -H hq-stage-docker02:4243 logs [container]
 # useful commands
 sudo killall -HUP mDNSResponder
 docker logs -f wmsstaging_wmsapi_1
-docker logs wmsstaging_wmsapi_1 2>&1 | grep "8294143"
+docker logs wmsstaging_wmsapi_1 2>&1 | grep "829414π3"
 docker-compose stop admindock
 docker-compose up --force-recreate -d admin
 docker-machine upgrade default
@@ -77,7 +79,7 @@ git status
 # remove all unstaged changes
 git checkout -- .
 git status
-git rebase -i
+git rebase -i HEAD~3
 git status
 git push origin HEAD:wms-931 -f
 git push origin HEAD:master
@@ -87,7 +89,7 @@ git branch -d branch_name
 git push origin --delete <branchName>
 ####GIT WORKFLOW####
 
-####MySQL####
+####MySQL####seller_orders_data.py
 ssh toor@hq-mysql01-nightly.stagealot.com
 mysql -h db.mysql.env -u take2_bespoke catalogue -p
 
@@ -295,6 +297,9 @@ if (1!=1) {
 sudo lshw -short
 #linux version
 lsb_release -a
+
+#amount of lines in file
+wc -l file
 ####SERVER SPECS****
 
 ####JAVA####
@@ -342,3 +347,26 @@ JVM_ARGS="-Xms512m -Xmx512m" jmeter.sh etc.
 ####KAFKA#####
 docker build -t tal_kafka_rest_proxy:latest .
 ####KAFKA#####
+
+####LOGFIRE####
+PP
+Host: b1ppsftp.logfireapps.com
+User: takealot_pp_if
+Pass: 2Frdd8vU
+Port: 22
+ 
+UAT
+Host: uatsftp.logfireapps.com
+User: takealot_uat_if
+Pass:  (|EP4).C
+Port 22
+ 
+User ID : takealot_if
+Password: Pt8e$d7W
+Remote Host: b1sftp.logfireapps.com
+Remote Port: 22
+ 
+Putty:
+Putty UAT
+ "C:\Program Files\Logfire\putty.exe" -ssh takealot_uat_rf@uat.logfireapps.com  -pw AN!&v*o)
+ ####LOGFIRE####

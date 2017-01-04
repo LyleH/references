@@ -113,13 +113,11 @@ sudo route add default gw 10.0.12.1
 ####MongoDB####
 
 ####BUST CATALOGUE CACHE####
-Curl_command (is_liquor flag, bust catalogue cache)
-toor@taljenkins01:/var/log/supervisor$ curl http:# taljenkins01.stagealot.com:8000/rest/productlines/40365199 | python -m json.tool | grep is_liquor
-toor@taljenkins01:/var/log/supervisor$ curl http:# taljenkins01.stagealot.com:8000/rest/cache-invalidate/varnish/productline/40365199/productline
+#check it first
+curl http:# taljenkins01.stagealot.com:8000/rest/productlines/40365199 | python -m json.tool | grep is_liquor
 
-curl http:# taljenkins01.stagealot.com:8000/rest/productlines/40400533 | python -m json.tool | grep is_liquor
-curl http:# taljenkins01.stagealot.com:8000/rest/cache-invalidate/varnish/productline/40400533/productline
-curl -X POST http:# wmsapi02:8010/outbound/product/{productId}
+#Bust it with Varnish
+curl http:# taljenkins01.stagealot.com:8000/rest/cache-invalidate/varnish/productline/40365199/productline
 ####BUST CATALOGUE CACHE####
 
 ####NGINX####
@@ -132,7 +130,7 @@ sudo tail nginx/php.errors.log
 (venv) toor@wmsapi:/usr/local/tal/tal/tal/services/orders/bin$ export PYTHONPATH=/usr/local/tal/tal
 (venv) toor@wmsapi:/usr/local/tal/tal/tal/services/orders/bin$ source /usr/local/tal/tal/venv/bin/activate
 (venv) toor@wmsapi:/usr/local/tal/tal/tal/services/orders/bin$ export ROLE=DEV
-# add idorder to file
+# add idorder to fileπ''
 (venv) toor@wmsapi:/usr/local/tal/tal/tal/services/orders/bin$ vi orders.csv
 python fulfill_orders_from_csv.py orders.csv
 ####ORDER FULFILLMENT MANUALLY####
@@ -370,3 +368,44 @@ Putty:
 Putty UAT
  "C:\Program Files\Logfire\putty.exe" -ssh takealot_uat_rf@uat.logfireapps.com  -pw AN!&v*o)
  ####LOGFIRE####
+
+####JENKINS####
+sudo apt-get aptitude install python-pip python-virtualenv
+
+# install pip and virtaulenv
+install nose-pip python-virtualenv
+
+# set variable
+venv="${WORKSPACE}"/.venv
+ 
+# delete folder and content if exists
+if [ -d "$venv" ]; then
+	#rm -fr "$venv"
+    echo "IT EXISTS"
+fi
+
+# create new virtualenv
+virtualenv --no-site-packages "$venv"
+
+# activate virtualenv
+. "$venv"/bin/activate
+ 
+
+# install requirements
+pip install bin/dependencies/MySQL-python-1.2.4c1.zip
+pip install -r requirements.txt -i https://admin:GIXsa5sDvejKfy9IGnhD@pypi.takealot.com/pypi/
+pip install --upgrade html5lib==1.0b8
+
+# set up roles
+cd tal/services/orders/test/
+pwd 
+ls -la
+
+
+export ROLE=DOCKER
+export PYTHONPATH= tal/
+
+
+nosetests -with-xunit -v /tal/services/orders/test "*test_client*"
+#python -m unittest discover  #./tal/services/orders/test/test "TestOrdersServiceClientTest"
+####JENKINS####

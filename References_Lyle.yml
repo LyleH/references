@@ -10,6 +10,10 @@ ssh -A toor@hq-stage-docker06.stagealot.com
 #LYLE STAGING
 ssh -A toor@hq-stage-docker07.stagealot.com
 
+admin.wms-docker2.env/s3cret/admin/
+dashboard.wms-docker6.env/
+http://www.lyle.env/
+
 
 https://dashboard.wms-docker6.env
 
@@ -409,3 +413,28 @@ export PYTHONPATH= tal/
 nosetests -with-xunit -v /tal/services/orders/test "*test_client*"
 #python -m unittest discover  #./tal/services/orders/test/test "TestOrdersServiceClientTest"
 ####JENKINS####
+
+####LINUX DOCKER ISSUES###
+Docker Linux tends to come back with a lot more issues than OSX, here are some:
+
+FRONTEND
+- Ensure symlinking
+cd ~/workspace/tal_frontend/etc/app
+ln -s config.docker.php config.php
+ 
+cd ~/workspace/core/etc/app
+ln -s config.docker.ini config.ini
+
+cd ~/workspace/core/docroot-ssl
+ln -s ../docroot/static
+
+- You may have provisioned the machine as root, then you won't be able to access site. Add the "IP" and env details to your /etc/hosts file
+10.4.1.57 www.wms-docker6.env root.env
+
+ADMIN
+- Ensure symlinking
+cd ~/workspace/tal_backend/docroot/inc
+ln -s config.env.php config.php
+
+Also ensure that the Linux server does not have APACHE or NGINX on it!!!!!!
+####LINUX DOCKER ISSUES###

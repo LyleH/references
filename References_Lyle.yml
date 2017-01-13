@@ -79,6 +79,8 @@ git diff origin/ETL-2411..origin/master
 # pull master into your branch
 git status
 git branch --set-upstream-to=origin/master wms-931
+# rebase master into branch
+git pull --rebase origin master
 git status
 # remove all unstaged changes
 git checkout -- .
@@ -122,6 +124,9 @@ curl http:# taljenkins01.stagealot.com:8000/rest/productlines/40365199 | python 
 
 #Bust it with Varnish
 curl http:# taljenkins01.stagealot.com:8000/rest/cache-invalidate/varnish/productline/40365199/productline
+
+#Continous grep
+tail -f services.catalogue8000.error.log | grep --40650434
 ####BUST CATALOGUE CACHE####
 
 ####NGINX####
@@ -172,12 +177,15 @@ sudo -i
 sudo rabbitmq status
 rabbitmqctl stop_app
 sudo rabbitmqctl start_app
+#list rabbit hosts
+rabbitmqctl list_vhosts
 ps waux | grep rabbit
 ps -ef | grep rabbit
 ps waux | grep rabbit
 rabbitmqctl list_queues
 watch -n1 rabbitmqctl list_queues
 watch -n0.5 rabbitmqctl list_queues
+# watch a specific queue
 watch -n1 rabbitmqctl list_queues -p wms
 # rabbit UI
 http:# localhost:15672/
@@ -425,9 +433,9 @@ ln -s config.docker.php config.php
 cd ~/workspace/core/etc/app
 ln -s config.docker.ini config.ini
 
-cd ~/workspace/core/docroot-ssl
-ln -s ../docroot/static
+cd ~/workspace/tal_frontend/docroot-ssl
 
+ln -s ../docroot/static
 - You may have provisioned the machine as root, then you won't be able to access site. Add the "IP" and env details to your /etc/hosts file
 10.4.1.57 www.wms-docker6.env root.env
 

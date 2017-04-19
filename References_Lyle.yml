@@ -9,7 +9,6 @@ ssh -A toor@hq-stage-docker06.stagealot.com
 
 #LYLE STAGING
 ssh -A toor@hq-stage-docker07.stagealot.com
-
 admin.wms-docker2.env/s3cret/admin/
 dashboard.wms-docker6.env/
 http://www.lyle.env/
@@ -44,8 +43,9 @@ docker -H hq-stage-docker02:4243 logs [container]
 sudo killall -HUP mDNSResponder
 docker logs -f wmsstaging_wmsapi_1
 docker logs wmsstaging_wmsapi_1 2>&1 | grep "829414π3"
-docker-compose stop admindock
-docker-compose up --force-recreate -d admin
+docker-compose stop admin
+docker-compose up --force-recreate admin
+
 docker-machine upgrade default
 
 # Linux bringing up container up
@@ -65,40 +65,63 @@ sudo apt-get install python-pip
 sudo pip install docker-compose
 ####DOCKER####
 
-####GIT WORKFLOW####
+####GIT WORKFLOW BIBLE####
 #make new branchno 
-git checkout -b makebranchname
+git checkout -b MYBRANCH
 # make your changes and commit to local branch
-git add
-git commit
+git add . #adds all chnages
+git add specifyfile # adds a single files
+git commit #you will be prompted for a commit message, keep it short but informative
 # push to your remote branch
-git push --set-upstream origin lyle_update_readme
+git push --set-upstream origin MYBRANCH
 git push
 # view differences between your branch and master
-git diff origin/ETL-2411..origin/master
+git diff origin/MYBRANCH..origin/master
 # pull master into your branch
 git status
 git branch --set-upstream-to=origin/master wms-931
-# rebase master into branch
+# rebase master into your branch (because they have diverged)
 git pull --rebase origin master
 git status
 # remove all unstaged changes
 git checkout -- .
 git status
-git rebase -i HEAD~3
+git rebase -i HEAD~3 #squash all your commits into 1, cleaner. 3 = number of commits, change accordingly
 git status
-git push origin HEAD:wms-931 -f
+git push origin HEAD:MYBRANCH -f
 git push origin HEAD:master
 # delete a local git branch using:
-git branch -d branch_name
+git branch -d MYBRANCH
 # delete a remote branch using:
-git push origin --delete <branchName>
-####GIT WORKFLOW####
+git push origin --delete MYBRANCH
 
-####MySQL####seller_orders_data.py
+#you can increase and reduce of depth of clone
+git fetch --depth=1000000
+#SET EDITOR IN LINUX$ sudo update-alternatives –config editor
+
+There are 5 alternatives which provide `editor’.
+Selection Alternative
+———————————————–
+1 /usr/bin/vim
+2 /bin/ed
+*+ 3 /bin/nano
+4 /usr/bin/vim.basic
+5 /usr/bin/vim.tiny
+Press enter to keep the default[*], or type selection number:
+
+#issues with identity
+git config --global user.email "lyle.henkeman@takealot.com"
+git config --global user.name "LyleH"
+
+####GIT WORKFLOW BIBLE####
+
+####MySQL####
 ssh toor@hq-mysql01-nightly.stagealot.com
 mysql -h db.mysql.env -u take2_bespoke catalogue -p
 
+mysql -u DBUSER -h DBSERVERNAME -p
+mysql -uroot -pt4k32_b3sp0k3 -h10.0.1.54
+mysql -uroot -pt4k32_b3sp0k3 -h10.0.1.56
 host: 10.4.1.31
 user: take2_bespoke
 database: take2
@@ -108,6 +131,10 @@ port: 3306
 Password - MokotAs7
 mysql> delete from productlines where idproductline = 34181661;
 mysql> select * from productlines where idproductline = 34181661;
+
+SHOW OPEN TABLES;
+SHOW ENGINE INNODB STATUS;
+show processlist;
 ####MySQL####
 
 ####MongoDB####
@@ -155,7 +182,7 @@ pip install -r requirements.txt
 ssh -A lylehenkeman@jump-box.takealot.com
 
 $product db
-five past doctor take
+  five past doctor take
 mysql -h 10.2.17.240 -u tal-ro -p take2
 
 #Admin
@@ -163,7 +190,7 @@ mysql -h 10.2.17.240 -u tal-ro -p take2
 
 ####PRODUCTION ACCESS####
 
-####LEAVE PORTAL####
+####LEAPVE PORTAL####
 https:// esscloud.sagevip.co.za/AXIOMATIC/
 Lyle.Henkeman
 Takealot!
@@ -286,7 +313,7 @@ python -m unittest test_module.TestClass.test_method
 ####ADMIN USER_ROLE HACK DEV####
 #To make your USER_ROLE work 
 cd /workspace/tal_backend/docroot/s3cret/admin/vieworder.php
-on line 2037 change 
+on line 2052 change 
 
 if (\tal\model\UserRole::isUserInRole($loggedin, \tal\model\UserRole::ROLE_AUTH_ADMINSTRATOR)) { ?>
 to
@@ -313,6 +340,7 @@ wc -l file
 ####SERVER SPECS****
 
 ####JAVA####
+http://askubuntu.com/questions/84483/how-to-completely-uninstall-java
 #Intall JAVA on Ubuntu
  wget --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u5-b13/jdk-8u5-linux-x64.tar.gz
 #follow wiki
@@ -446,3 +474,164 @@ ln -s config.env.php config.php
 
 Also ensure that the Linux server does not have APACHE or NGINX on it!!!!!!
 ####LINUX DOCKER ISSUES###
+
+export _JAVA_OPTIONS="-Xms1024m -Xmx2048m"                                                                                ✓  10048  21:04:08
+ lyle@Lyle-Henkeman  ~/Downloads  export _JAVA_OPTIONS="-XX:PermSize=128m -XX:MaxPermSize=256m"
+
+
+ 1. Java Memory Overview
+A quick review of Java memory structure :
+
+1. Java Heap Size
+Place to store objects created by your Java application, this is where Garbage Collection takes place, the memory used by your Java application. For a heavy Java process, insufficient Heap size will cause the popular java.lang.OutOfMemoryError: Java heap space.
+
+-Xms<size> - Set initial Java heap size
+-Xmx<size> - Set maximum Java heap size
+
+$ java -Xms512m -Xmx1024m JavaApp
+2. Perm Gen Size
+Place to store your loaded class definition and metadata. If a large code-base project is loaded, the insufficient Perm Gen size will cause the popular Java.Lang.OutOfMemoryError: PermGen.
+
+-XX:PermSize<size> - Set initial PermGen Size.
+-XX:MaxPermSize<size> - Set the maximum PermGen Size.
+
+$ java -XX:PermSize=64m -XX:MaxPermSize=128m JavaApp
+
+
+pip list | grep pyexcel
+find /usr/local/lib/ -name "*pyexcel*"
+
+
+####LARGEST FILES IN LINUX####
+To find the largest 10 files (linux/bash):
+
+find . -type f -print0 | xargs -0 du | sort -n | tail -10 | cut -f2 | xargs -I{} du -sh {}
+
+To find the largest 10 directories:
+
+find . -type d -print0 | xargs -0 du | sort -n | tail -10 | cut -f2 | xargs -I{} du -sh {}
+####LARGEST FILES IN LINUX####
+
+
+####KUBERNETES####
+#A node is a VM or a physical computer that serves as a worker machine in a Kubernetes cluster.
+
+#Minikube is a lightweight Kubernetes implementation that creates a VM on your local machine and deploys a simple cluster containing only one node.
+
+#get minikuber version
+minikube version
+
+#start minikube
+minikube start
+
+#cluster versions
+kubectl version
+
+#cluster info
+kubectl cluster-info
+
+#node info
+kubectl get nodes
+
+#deploy
+kubectl run kubernetes-bootcamp --image=docker.io/jocatalin/kubernetes-bootcamp:v1 --port=8080
+
+#see deployments
+kubectl get deployments
+
+#Get the name of the Pod and store it in the POD_NAME environment variable:
+export POD_NAME=$(kubectl get pods -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+echo Name of the Pod: $POD_NAME
+
+#curl it
+curl http://localhost:8001/api/v1/proxy/namespaces/default/pods/$POD_NAME/
+
+#Kubernetes Pods
+#represents a group of one or more application containers
+#Shared storage, as Volumes
+#Networking, as a unique cluster IP address
+#Information about how to run each container, such as the container image version or specific ports to use
+
+#Kubelet: a process responsible for communication between the Kubernetes Master and the Nodes; it manages the Pods and the containers running on a machine.
+
+#kubectl commands
+kubectl get - list resources
+kubectl describe - show detailed information about a resource
+kubectl logs - print the logs from a container in a pod
+kubectl exec - execute a command on a container in a pod
+
+##kubectl pod commands
+kubectl get pods -l run=kubernetes-bootcamp
+kubectl get services -l run=kubernetes-bootcamp
+export POD_NAME=$(kubectl get pods -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+echo Name of the Pod: $POD_NAME
+kubectl label pod $POD_NAME app=v1
+kubectl describe pods $POD_NAME
+ubectl get pods -l app=v1
+
+#scale up
+kubectl get deployments
+kubectl scale deployments/kubernetes-bootcamp --replicas=4
+kubectl get deployments
+kubectl get pods -o wide
+kubectl describe deployments/kubernetes-bootcamp
+kubectl describe services/kubernetes-bootcamp
+export NODE_PORT=$(kubectl get services/kubernetes-bootcamp -o go-template='{{(index .spec.ports 0).nodePort}}')
+echo NODE_PORT=$NODE_PORT
+curl host01:$NODE_PORT
+
+#scale down
+kubectl scale deployments/kubernetes-bootcamp --replicas=2
+kubectl get deployments
+kubectl get pods -o wide
+
+#Kubernetes Takealot
+#Bring up minikube
+cd ~/workspace/dev-environments/kubernetes-environments
+./bin/start-minikube.sh
+ 
+# check on when its up
+kubectl get pods -owide
+ 
+#create your service
+kubectl create -f environment/roles/statsd
+kubectl create -f environment/roles/graphite
+kubectl create -f environment/roles/grafana
+kubectl create -f environment/roles/cart-service
+kubectl create -f environment/roles/wishlist-service
+
+# expose it onto our localhost
+./bin/expose.sh
+#or
+./bin/expose.sh catalogue-service 1234
+
+#kubernetes dashboard
+kubectl --context admin@kubernetes proxy
+#access it at http://localhost:8001/ui
+
+#check running pods
+kubectl get pods -owide
+NAME                                    READY     STATUS    RESTARTS   AGE       IP            NODE
+cart-service-2994544000-rsdm5           1/1       Running   0          18m       172.17.0.11   minikube
+
+#List Pods In All Namespaces
+kubectl get pods --all-namespaces
+
+#tail logs
+stern frontend
+
+#replace a service / deployment
+kubectl replace -f environment/roles/
+
+#stop and start pods
+kubectl delete pod <pod-name>
+kubectl create pod <pod-name>
+#or
+#delete all pods
+kubectl delete pods --all
+
+#inside a pod
+kubectl exec <pod-name> -ti -- bash
+#Run the following bash command
+dig SRV take2.mysql.stagealot.com
+####KUBERNETES####

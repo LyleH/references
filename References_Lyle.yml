@@ -113,6 +113,19 @@ Press enter to keep the default[*], or type selection number:
 git config --global user.email "lyle.henkeman@takealot.com"
 git config --global user.name "LyleH"
 
+#EMOJIS
+emotion :+1: :-1: :clap: :heart: :sparkles: :v: :zzz:
+icon :new: :ok: :cool: :vs: :tm: :warning: :wheelchair: :zap: :art: :bomb: :bulb: :key: :lock: :memo: :mag: 
+item :book: :gift: :moneybag: :mega: :scissors: :hammer:
+device :computer: :iphone: :calling: :email: 
+human :cop: :runner: :feet: :fist: :punch: :lipstick: :tophat:
+food :beer: :cake: :smoking:
+behicle :airplane: :bike: :bus: :ski: :taxi: :train:
+animal :bear: :fish: :octocat:
+nature :fire: :leaves: :star: :sunny:
+
+aliases :+1:=:thumbsup: :-1:=:thumbsdown: :memo:=:pencil:
+
 ####GIT WORKFLOW BIBLE####
 
 ####MySQL####
@@ -647,7 +660,28 @@ curl promise-date.kubernetes.env:<YOUR_PORT>/order/<YOUR_ORDER>
 dig SRV _http._tcp.cart-service.stagealot.com
 
 #office env
-#replace kubectl in 
+eval $(minikube docker-env)
+docker build -t tal-locust . #do this in locust repo (but same terminal you did previous step)
+
+kubectl exec -it locust-service-1938518015-fd7bf bash
+
+kubectl delete -f environment/roles/locust
+kubectl create -f environment/roles/locust
+
+eval $(minikube docker-env)
+docker images
+#So in the same terminal window where you ran the eval, run the docker build
+
+Delete office environment
+kubectl --context admin@kubernetes -n qa-01 delete namespace qa-01
+
+kubectl --context admin@kubernetes proxy
+http://localhost:8001/api/v1/proxy/namespaces/kube-system/services/kubernetes-dashboard/#/namespace/qa-01?namespace=default
+kubectl --context admin@kubernetes -n qa-01 get pods -o wide
+stern --context admin@kubernetes -n qa-01 marketplace
+
+kubectl get deployments
+kubectl delete deployment locust-master
 
 ####KUBERNETES####
 

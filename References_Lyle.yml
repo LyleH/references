@@ -393,9 +393,14 @@ command | tee output.txt
 
 ####JVM####
 ##   Environment variables:
-VM_ARGS - optional java args, e.g. -Dprop=val
+Increase memory for JAVA to avoid OOM issue
 
-JVM_ARGS="-Xms512m -Xmx512m" jmeter.sh etc.
+#vim jmeter.sh, change this line to about 3/4's of the machine total capacity i.e. a few gigs'
+JVM_ARGS="-Xms512m -Xmx512m"
+
+# vim jmeter
+#search for "HEAP", change this size to
+HEAP="-Xms14336m -Xmx14336m" #this will prevent GC OOM issues
 ####JVM####
 
 ####KAFKA#####
@@ -659,7 +664,7 @@ curl promise-date.kubernetes.env:<YOUR_PORT>/order/<YOUR_ORDER>
 #dig
 dig SRV _http._tcp.cart-service.stagealot.com
 
-#office env
+#OFFICE ENVS
 eval $(minikube docker-env)
 docker build -t tal-locust . #do this in locust repo (but same terminal you did previous step)
 
@@ -682,7 +687,6 @@ stern --context admin@kubernetes -n qa-01 marketplace
 
 kubectl get deployments
 kubectl delete deployment locust-master
-
 ####KUBERNETES####
 
 ####ZipKin####
@@ -697,7 +701,14 @@ gofabric8 volumes
 minishift service zipkin
 ####ZipKin####
 
-
 ####NGROK####
 ngrok http 80
 ####NGROK####
+
+####REDSHIFT####
+#How to connect to Redshift:
+psql -h 52.210.111.16 -p 5439 -U reporting -W -d user_tracking
+
+pw: scaryMonk3y63
+
+####REDSHIFT####

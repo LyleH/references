@@ -710,5 +710,9 @@ ngrok http 80
 psql -h 52.210.111.16 -p 5439 -U reporting -W -d user_tracking
 
 pw: scaryMonk3y63
-
 ####REDSHIFT####
+
+####EC2####
+ssh ubuntu@10.9.0.243
+
+####EC2####

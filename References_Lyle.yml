@@ -678,15 +678,17 @@ docker images
 #So in the same terminal window where you ran the eval, run the docker build
 
 Delete office environment
-kubectl --context admin@kubernetes -n qa-01 delete namespace qa-01
+kubectl --context kubernetes-admin@kubernetes -n qa-01 delete namespace qa-01
 
-kubectl --context admin@kubernetes proxy
-http://localhost:8001/api/v1/proxy/namespaces/kube-system/services/kubernetes-dashboard/#/namespace/qa-01?namespace=default
-kubectl --context admin@kubernetes -n qa-01 get pods -o wide
-stern --context admin@kubernetes -n qa-01 marketplace
+kubectl --context kubernetes-admin@kubernetes proxy
+http://localhost:8001/api/v1/proxy/namespaces/kube-system/services/kubernetes-dashboard/#!/workload?namespace=qa-01
+kubectl --context kubernetes-admin@kubernetes -n qa-01 get pods -o wide
+stern --context kubernetes-admin@kubernetes -n qa-01 marketplace
 
 kubectl get deployments
 kubectl delete deployment locust-master
+
+kubectl get events
 ####KUBERNETES####
 
 ####ZipKin####
@@ -713,6 +715,16 @@ pw: scaryMonk3y63
 ####REDSHIFT####
 
 ####EC2####
-ssh ubuntu@10.9.0.243
+#console
+https://takealot.signin.aws.amazon.com/console
+lyle.henkeman / iBwLAO]1&FpR
 
+ssh ubuntu@10.9.0.243
 ####EC2####
+
+####MobiCred####
+LYLE HENKEMAN      
+Username      lyle.henkeman@takealot.com
+Password       Takealot789
+Mobile           076 554 9257
+####MobiCred####

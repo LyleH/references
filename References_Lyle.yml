@@ -728,3 +728,15 @@ Username      lyle.henkeman@takealot.com
 Password       Takealot789
 Mobile           076 554 9257
 ####MobiCred####
+
+####SOAP####
+mvn clean install
+mvn exec:java
+####SOAP####
+
+####SCP####
+#etch file from jumpbox
+scp ubuntu@10.9.0.106:~/workspace/tal-meter-ec2/results/tal-meter-ec2-1498047101-complete.jtl .
+#then, fetch from your machine
+scp toor@jump-box.takealot.com:~/lyle/tal-meter-ec2-1498047101-complete.jtl .
+####SCP####

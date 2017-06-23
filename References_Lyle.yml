@@ -718,8 +718,46 @@ pw: scaryMonk3y63
 #console
 https://takealot.signin.aws.amazon.com/console
 lyle.henkeman / iBwLAO]1&FpR
-
 ssh ubuntu@10.9.0.243
+
+#aws configure
+AKIAJIPDAGCHGXTNUKAA
+ZkpsGZUEejoNhXfsDwD+qx8tJzb+nblMUkE4y1mF Hide
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Action": [
+				"ec2:CreateTags",
+				"ec2:DescribeInstances",
+				"ec2:DescribeSpotPriceHistory",
+				"ec2:DescribeSpotInstanceRequests",
+				"ec2:RequestSpotInstances",
+				"ec2:RunInstances",
+				"ec2:StartInstances",
+				"ec2:DescribeSubnets",
+				"ec2:DescribeSecurityGroups"
+			],
+			"Effect": "Allow",
+			"Resource": [
+				"*"
+			]
+		},
+		{
+			"Action": [
+				"ec2:StopInstances",
+				"ec2:TerminateInstances"
+			],
+			"Effect": "Allow",
+			"Resource": "*",
+			"Condition": {
+				"StringEquals": {
+					"ec2:ResourceTag/jmeter": "True"
+				}
+			}
+		}
+	]
+}
 ####EC2####
 
 ####MobiCred####

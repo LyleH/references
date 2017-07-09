@@ -20,4 +20,5 @@ def solution(a):
 
 if __name__ == '__main__':
     assert solution([1, 5, 3, 3, 7]) == True
-
+    assert solution([1, 3, 5, 3, 4]) == False
+    assert solution([1, 3, 5]) == True

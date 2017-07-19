@@ -9,7 +9,6 @@ from __future__ import print_function
 class CountidenticalPairs(object):
     @classmethod
     def main(cls, args):
-        #  TODO Auto-generated method stub
         A = [None] * 6
         A[0] = 3
         A[1] = 5
@@ -20,7 +19,6 @@ class CountidenticalPairs(object):
         print(CountidenticalPairs().solution(A))
 
     def solution(self, A):
-        """ generated source for method solution """
         #  use key-value store to store the unique pair
         lhm = LinkedHashMap()
         i = 0
